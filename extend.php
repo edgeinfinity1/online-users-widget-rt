@@ -44,5 +44,6 @@ return [
     (new Extend\Settings)
         ->default('afrux-online-users-widget.max_users', 15)
         ->default('afrux-online-users-widget.cache_ttl', 30)
-        ->default('afrux-online-users-widget.last_seen_interval', 5),
+        ->default('afrux-online-users-widget.last_seen_interval', 5)
+        ->serializeToForum('afrux-online-users-widget.maxUsers', 'afrux-online-users-widget.max_users', 'intval'),
 ];
