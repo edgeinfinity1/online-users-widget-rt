@@ -240,7 +240,7 @@ var OnlineUsersWidget = /*#__PURE__*/function (_Widget) {
       method: 'GET',
       url: flarum_common_app__WEBPACK_IMPORTED_MODULE_1___default.a.forum.attribute('apiUrl') + '/online-users'
     });
-    setResults(response.data, response.meta);
+    this.setResults(response.data, response.meta);
   };
   _proto.setResults = function setResults(data, meta) {
     users = this.filterTimeUsers(users);

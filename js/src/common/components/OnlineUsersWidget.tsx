@@ -79,7 +79,7 @@ export default class OnlineUsersWidget extends Widget<WidgetAttrs> {
       method: 'GET',
       url: app.forum.attribute('apiUrl') + '/online-users'
     });
-    setResults(response.data, response.meta);
+    this.setResults(response.data, response.meta);
   }
 
   setResults(data, meta) {
