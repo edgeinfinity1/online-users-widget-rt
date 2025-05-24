@@ -14,8 +14,6 @@ export default class OnlineUsersWidget extends Widget<WidgetAttrs> {
   oncreate(vnode): void {
     this.attrs.state.users = app.forum.onlineUsers() || [];
     this.attrs.state.total = app.forum.totalOnlineUsers() || 0;
-    this.attrs.state.max = app.forum.attribute("afrux-online-users-widget.maxUsers") || 15;
-    console.log("max: " + app.forum.attribute("afrux-online-users-widget.maxUsers"));
     if (!this.attrs.state.timerAdded) {
     console.log("onliner timer added");
         setInterval(this.load.bind(this), 120000);
@@ -39,7 +37,7 @@ export default class OnlineUsersWidget extends Widget<WidgetAttrs> {
     if (this.attrs.state.isLoading) {
       return <LoadingIndicator />;
     }
-
+    
     this.attrs.state.users = (this.attrs.state.users || app.forum.onlineUsers()) || [];
     const users = this.attrs.state.users;
     this.attrs.state.total = (this.attrs.state.total || app.forum.totalOnlineUsers()) || 0;
@@ -66,20 +64,32 @@ export default class OnlineUsersWidget extends Widget<WidgetAttrs> {
     );
   }
   
-  load(): void {
+  async load(): Promise<void> {
     if (this.loadWithInitialResponse) {
       this.setResults(app.forum.onlineUsers());
       return;
     }
 
     this.attrs.state.isLoading = true;
-    console.log("reloading widget");
 
-    const response = app.request<OnlineUsersResponse>({
-      method: 'GET',
-      url: app.forum.attribute('apiUrl') + '/online-users'
-    });
-    this.setResults(response.data, response.meta);
+    try {
+      const response = await app.request<OnlineUsersResponse>({
+        method: 'GET',
+        url: app.forum.attribute('apiUrl') + '/online-users'
+      });
+
+      app.store.pushPayload(response);
+    
+      const users = response.data.map(userData => 
+        app.store.getById('users', userData.id)
+      );
+
+      this.setResults(users, response.meta);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.attrs.state.isLoading = false;
+    }
   }
 
   setResults(data, meta) {
