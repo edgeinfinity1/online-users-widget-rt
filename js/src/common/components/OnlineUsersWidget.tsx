@@ -83,7 +83,6 @@ export default class OnlineUsersWidget extends Widget<WidgetAttrs> {
   }
 
   setResults(data, meta) {
-    users = this.filterTimeUsers(users);
     this.attrs.state.users = data;
     this.attrs.state.total = meta?.totalCount;
     this.attrs.state.isLoading = false;

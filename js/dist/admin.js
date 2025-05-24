@@ -279,7 +279,6 @@ var OnlineUsersWidget = /*#__PURE__*/function (_Widget) {
     this.setResults(response.data, response.meta);
   };
   _proto.setResults = function setResults(data, meta) {
-    users = this.filterTimeUsers(users);
     this.attrs.state.users = data;
     this.attrs.state.total = meta == null ? void 0 : meta.totalCount;
     this.attrs.state.isLoading = false;
